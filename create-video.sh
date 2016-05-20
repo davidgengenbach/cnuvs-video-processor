@@ -1,16 +1,24 @@
 #!/usr/bin/env sh
 
+FOLDER=$1
+VIDEO_FILE=$FOLDER/video.mp4
+VIDEO_OUT_FILE=$FOLDER/out.mp4
+SLIDES_FILE=$FOLDER/slides.json
+FFCONCAT_FILE=$FOLDER/in.ffconcat
+
+echo "Starting conversion in folder: '$1'"
+
 ERR=0
-if [ ! -d data ]; then
-  echo "Needed directory 'data' does NOT exist" && ERR=1
+if [ ! -d $FOLDER ]; then
+  echo "Needed directory '$FOLDER' does NOT exist" && ERR=1
 fi
 
-if [ ! -f data/slides.json ]; then
-  echo "Needed file 'data/slides.json' does NOT exist" && ERR=1
+if [ ! -f $VIDEO_FILE ]; then
+  echo "Needed file '$VIDEO_FILE' does NOT exist" && ERR=1
 fi
 
-if [ ! -f data/video.mp4 ]; then
-  echo "Needed file 'data/video.mp4' does NOT exist" && ERR=1
+if [ ! -f $SLIDES_FILE ]; then
+  echo "Needed file '$SLIDES_FILE' does NOT exist" && ERR=1
 fi
 
 if [ $ERR == 1 ]; then
@@ -19,13 +27,17 @@ fi
 
 set -x
 
-# Extract audio from video and copy left channel to right
-ffmpeg -i data/video.mp4 -q:a 0 -map a -vcodec copy -ab 220k -ar 48000 -ac 1 data/audio.ogg
+
+# Download slide files
+./download-slides.py $SLIDES_FILE $FOLDER || exit 1
 
 # Create slide file to create video with slides
-./create-ffconcat-file.py
+./create-ffconcat-file.py $SLIDES_FILE $FFCONCAT_FILE || exit 1
+
+# Extract audio from video and copy left channel to right
+ffmpeg -i $VIDEO_FILE -q:a 0 -map a -vcodec copy -ab 220k -ar 48000 -ac 1 $FOLDER/audio.ogg || exit 1
 
 # Create video from slides and audio
-ffmpeg -i data/in.ffconcat -i data/audio.ogg -vf fps=4 data/out.mp4
+ffmpeg -i $FFCONCAT_FILE -i $FOLDER/audio.ogg -vf fps=4 $VIDEO_OUT_FILE || exit 1
 
-echo "Your video is now in data/out.mp4"
+echo "Your video is now in '$VIDEO_OUT_FILE'"
