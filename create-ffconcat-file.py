@@ -10,8 +10,9 @@ if len(sys.argv) < 3:
 slide_filepath = sys.argv[1]
 ffconcat_filepath = sys.argv[2]
 
-slides_file = open(slide_filepath, 'r')
-slides = json.load(slides_file)
+
+with open(slide_filepath, 'r') as slides_file:
+    slides = json.load(slides_file)
 
 slides[0]["slide"]["begin"] = 0
 
@@ -21,8 +22,8 @@ for slide in slides:
     begin = int(slide["slide"]["begin"])
     end = int(slide["slide"]["end"])
     # duration in seconds
-    duration = (end - begin) / 1000
+    duration = round((end - begin) / float(1000), 2)
     out += "file {}\nduration {}\n".format(img_path, duration)
 
-ffconcat_file = open(ffconcat_filepath, 'w')
-ffconcat_file.write(out)
+with open(ffconcat_filepath, 'w') as ffconcat_file:
+    ffconcat_file.write(out)

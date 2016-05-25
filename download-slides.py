@@ -23,6 +23,8 @@ except OSError:
     print "Image folder already existing"
 
 for slide in slides:
+    if slide["slide"]["img"] is None:
+        continue
     img_path = slide["slide"]["img"]
     img_local_path = "images/" + img_path.split("/")[-1]
     img_local_realpath = output_filepath + '/' + img_local_path;
