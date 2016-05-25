@@ -13,8 +13,8 @@ if len(sys.argv) < 3:
 filepath = sys.argv[1]
 output_filepath = sys.argv[2]
 
-slides_file = open(filepath, 'r')
-slides = json.load(slides_file)
+with open(filepath, 'r') as slides_file:
+    slides = json.load(slides_file)
 
 try:
     os.mkdir(output_filepath + '/images')
@@ -35,5 +35,5 @@ for slide in slides:
         print "File already downloaded: {}".format(img_local_path)
     slide["slide"]["local"] = img_local_path
 
-slides_file = open(filepath, 'w')
-json.dump(slides, slides_file)
+with open(filepath, 'w') as slides_file:
+    json.dump(slides, slides_file)
