@@ -27,7 +27,7 @@ for slide in slides:
         continue
     img_path = slide["slide"]["img"]
     img_local_path = "images/" + img_path.split("/")[-1]
-    img_local_realpath = output_filepath + '/' + img_local_path;
+    img_local_realpath = output_filepath + '/' + img_local_path
     if not os.path.isfile(img_local_realpath):
         print "Downloading file: {}".format(img_local_path)
         urllib.urlretrieve(img_path, img_local_realpath)
