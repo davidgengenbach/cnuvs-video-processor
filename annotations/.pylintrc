@@ -1,0 +1,4 @@
+# http://docutils.sourceforge.net/sandbox/py-rest-doc/utils/pylintrc
+
+[MESSAGES CONTROL]
+disable-msg=C0103

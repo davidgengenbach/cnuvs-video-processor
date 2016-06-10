@@ -10,7 +10,6 @@ if len(sys.argv) < 3:
 slide_filepath = sys.argv[1]
 ffconcat_filepath = sys.argv[2]
 
-
 with open(slide_filepath, 'r') as slides_file:
     slides = json.load(slides_file)
 

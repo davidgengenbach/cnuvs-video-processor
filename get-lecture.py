@@ -25,17 +25,21 @@ try:
 except OSError:
     pass
 
+def download_progress(count, blockSize, totalSize):
+      percent = int(count*blockSize*100/totalSize)
+      sys.stdout.write("\r-> %d%%" % percent)
+      sys.stdout.flush()
+
 def download_if_not_existent(url, path):
     if not os.path.isfile(path):
         print "Downloading file: {}".format(path)
-        urllib.urlretrieve(url, path)
+        urllib.urlretrieve(url, path, reporthook=download_progress)
         print "=> Finished"
     else:
         print "File already downloaded: {}".format(path)
 
-
 print "Downloading slides"
-download_if_not_existent(SLIDES_URL, output_path + '/' + 'slides.json')
+download_if_not_existent(SLIDES_URL, "{}/slides.json".format(output_path))
 
 print "Downloading video (this may take a while)"
-download_if_not_existent(VIDEO_URL, output_path + '/' + 'video.mp4')
+download_if_not_existent(VIDEO_URL, "{}/video.mp4".format(output_path))
