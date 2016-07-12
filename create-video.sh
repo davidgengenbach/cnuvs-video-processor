@@ -35,9 +35,14 @@ set -x
 ./create-ffconcat-file.py $SLIDES_FILE $FFCONCAT_FILE || exit 1
 
 # Extract audio from video and copy left channel to right
-ffmpeg -i $VIDEO_FILE -q:a 0 -map a -vcodec copy -ab 220k -ar 48000 -ac 1 $FOLDER/audio.ogg || exit 1
+ffmpeg -i $VIDEO_FILE -q:a 0 -map a -vcodec copy -ac 1 $FOLDER/audio.mp4 || exit 1
 
 # Create video from slides and audio
-ffmpeg -i $FFCONCAT_FILE -i $FOLDER/audio.ogg -vf fps=4 $VIDEO_OUT_FILE || exit 1
+ffmpeg -i $FFCONCAT_FILE -i $FOLDER/audio.mp4 -c:a copy -vf fps=5 $VIDEO_OUT_FILE || exit 1
 
 echo "Your video is now in '$VIDEO_OUT_FILE'"
+
+#ffmpeg -i 1_a.mp4 -filter:a "atempo=2.0" -vn 1_a_speedup.mp4
+#ffmpeg -i video.mp4 -q:a 0 -map a -vcodec copy -ac 1 audio.mp4
+#ffmpeg -i video.mp4 -vn -c:a copy audio.mp4
+#ffmpeg -i in.ffconcat -i audio.mp4 -c:a copy -vf fps=5 out.mp4

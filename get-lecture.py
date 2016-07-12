@@ -7,7 +7,7 @@ import sys
 import json
 
 if len(sys.argv) < 3:
-    print "You have to pass the url to the lecture and an output folder!"
+    print "Usage: {} folder URL".format(sys.argv[0])
     sys.exit(1)
 
 output_path = sys.argv[1]
